@@ -13,4 +13,4 @@ if is_simple_core:
 
 
 setup_variable()  # 重载Variable类的一些属性
-__version__ = '0.0.13'
+__version__ = '0.2.24'  # version.stage.step
