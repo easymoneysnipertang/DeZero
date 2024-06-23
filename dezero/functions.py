@@ -96,7 +96,7 @@ def transpose(x, axes=None):
 
 
 # =============================================================================
-# tensor operations: sum / sum_to / broadcast_to
+# tensor operations: sum / sum_to / broadcast_to / average / matmul
 # =============================================================================
 class Sum(Function):
     def __init__(self, axis=None, keepdims=False):
@@ -157,3 +157,25 @@ def broadcast_to(x, shape):
     if x.shape == shape:
         return as_variable(x)
     return BroadcastTo(shape)(x)
+
+
+def average(x, axis=None, keepdims=False):
+    x = as_variable(x)
+    y = sum(x, axis, keepdims)
+    return y * (y.data.size / x.data.size)
+
+
+class MatMul(Function):
+    def forward(self, x, W):
+        y = x.dot(W)  # 矩阵乘法
+        return y
+
+    def backward(self, gy):
+        x, W = self.inputs  # 按照公式反向传播
+        gx = matmul(gy, W.T)  # 矩阵乘法的反向传播
+        gW = matmul(x.T, gy)  # 矩阵乘法的反向传播
+        return gx, gW
+
+
+def matmul(x, W):
+    return MatMul()(x, W)
