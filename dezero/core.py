@@ -29,7 +29,7 @@ def no_grad():
 
 
 # =============================================================================
-# Variable / Function
+# Variable / Function / Parameter
 # =============================================================================
 class Variable:
     __array_priority__ = 200  # 优先级设置为200
@@ -176,6 +176,10 @@ class Function:
     def backward(self, gys):
         raise NotImplementedError()
     
+
+class Parameter(Variable):
+    pass
+
 
 # =============================================================================
 # Arithmetic operations
