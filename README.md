@@ -22,4 +22,4 @@ Dezro
 - [Stage 1: Automatically compute derivatives](./stage1.ipynb)
 - [Stage 2: Express in natural code](./stage2.ipynb)
 - [Stage 3: Achieve higher derivatives](./stage3.ipynb)
-- [Stage 4: Creating neural networks](./stage4.ipynb)
+- [Stage 4: Create neural networks](./stage4.ipynb)

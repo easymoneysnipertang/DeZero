@@ -320,3 +320,5 @@ def setup_variable():
     Variable.__isub__ = sub
     Variable.__imul__ = mul
     Variable.__itruediv__ = div
+
+    Variable.__getitem__ = dezero.functions.get_item
