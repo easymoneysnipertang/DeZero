@@ -466,3 +466,18 @@ class Clip(Function):
 
 def clip(x, x_min, x_max):
     return Clip(x_min, x_max)(x)
+
+
+# =============================================================================
+# accuracy
+# =============================================================================
+def accuracy(y, t):
+    '''
+    计算精确度，不可微
+    '''
+    y, t = as_variable(y), as_variable(t)  # 转换成Variable
+    
+    pred = y.data.argmax(axis=1).reshape(t.shape)  # 取最大值的索引，得到预测结果
+    result = (pred == t.data)
+    acc = result.mean()  # 计算正确占比
+    return Variable(as_array(acc))

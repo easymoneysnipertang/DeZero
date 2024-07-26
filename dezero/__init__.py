@@ -20,6 +20,8 @@ else:
     from dezero.core import setup_variable
     from dezero.layers import Layer
     from dezero.models import Model
+    from dezero.datasets import Dataset
+    from dezero.dataloaders import DataLoader
 
 setup_variable()  # 重载Variable类的一些属性
-__version__ = '0.4.44'  # version.stage.step
+__version__ = '0.4.50'  # version.stage.step
