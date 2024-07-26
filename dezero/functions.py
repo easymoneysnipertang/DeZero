@@ -401,7 +401,7 @@ class ReLU(Function):
 
     def backward(self, gy):
         x, = self.inputs
-        mask = x.data > 0
+        mask = x.data > 0  # 掩码，大于0梯度可以传递，否则为0
         gx = gy * mask
         return gx
 

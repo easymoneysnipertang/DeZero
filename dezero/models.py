@@ -5,7 +5,7 @@ import dezero.layers as L
 
 
 # =============================================================================
-# Model / Sequential / MLP
+# Model (base class)
 # =============================================================================
 class Model(Layer):  # 直接继承Layer类，更方便管理layers
     def plot(self, *inputs, to_file='model.png'):
@@ -13,6 +13,9 @@ class Model(Layer):  # 直接继承Layer类，更方便管理layers
         return utils.plot_dot_graph(y, verbose=True, to_file=to_file)
     
 
+# =============================================================================
+# Sequential / MLP
+# =============================================================================
 class Sequential(Model):
     def __init__(self, *layers):
         super().__init__()
