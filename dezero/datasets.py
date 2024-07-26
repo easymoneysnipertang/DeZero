@@ -7,12 +7,12 @@ import numpy as np
 # =============================================================================
 class Dataset:
     def __init__(self, train=True, transform=None, target_transform=None):
-        self.train = train
+        self.train = train  # 是否为训练数据集
         self.transform = transform
         self.target_transform = target_transform
-        if self.transform is None:
+        if self.transform is None:  # 对数据没有进行任何处理
             self.transform = lambda x: x
-        if self.target_transform is None:
+        if self.target_transform is None:  # 对标签没有进行任何处理
             self.target_transform = lambda x: x
 
         self.data = None
@@ -20,13 +20,12 @@ class Dataset:
         self.prepare()
 
     def __getitem__(self, index):
-        assert np.isscalar(index)
-        if self.label is None:
+        assert np.isscalar(index)  # index必须是标量
+        if self.label is None:  # 无监督学习
             return self.transform(self.data[index]), None
         else:
-            return self.transform(self.data[index]),\
-                   self.target_transform(self.label[index])
-
+            return self.transform(self.data[index]), self.target_transform(self.label[index])
+        
     def __len__(self):
         return len(self.data)
 
@@ -64,4 +63,4 @@ def get_spiral(train=True):
 
 class Spiral(Dataset):
     def prepare(self):
-        self.data, self.label = get_spiral(self.train)
+        self.data, self.label = get_spiral(self.train)  # 准备数据和标签
