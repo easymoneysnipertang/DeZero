@@ -2,6 +2,7 @@ from dezero.core import Parameter
 import weakref
 import numpy as np
 import dezero.functions as F
+from dezero import cuda
 
 
 # =============================================================================
@@ -40,6 +41,14 @@ class Layer:
         for param in self.params():
             param.cleargrad()
 
+    def to_cpu(self):
+        for param in self.params():
+            param.to_cpu()
+
+    def to_gpu(self):
+        for param in self.params():
+            param.to_gpu()
+
 
 # =============================================================================
 # Linear
@@ -62,16 +71,17 @@ class Linear(Layer):
         else:
             self.b = Parameter(np.zeros(output_size, dtype=dtype), name='b')
 
-    def _init_W(self):
+    def _init_W(self, xp=np):
         I, O = self.input_size, self.output_size
         # 初始化权重，使用标准差为1/sqrt(I)的高斯分布
-        W_data = np.random.randn(I, O).astype(self.dtype) * np.sqrt(1 / I)
+        W_data = xp.random.randn(I, O).astype(self.dtype) * np.sqrt(1 / I)
         self.W.data = W_data
     
     def forward(self, x):
         if self.W.data is None:  # 如果W未初始化，根据输入大小进行初始化
             self.input_size = x.shape[1]
-            self._init_W()
+            xp = cuda.get_array_module(x)
+            self._init_W(xp)
 
         y = F.linear(x, self.W, self.b)
         return y
