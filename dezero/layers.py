@@ -3,6 +3,7 @@ import weakref
 import numpy as np
 import dezero.functions as F
 from dezero import cuda
+import os
 
 
 # =============================================================================
@@ -48,6 +49,37 @@ class Layer:
     def to_gpu(self):
         for param in self.params():
             param.to_gpu()
+
+    def _flatten_params(self, params_dict, parent_key=""):
+        for name in self._params:  # 遍历所有参数
+            obj = self.__dict__[name]  # 根据名称取出参数
+            key = parent_key + '/' + name if parent_key else name
+
+            if isinstance(obj, Layer):  # 如果是Layer实例，递归调用_flatten_params方法
+                obj._flatten_params(params_dict, key)
+            else:
+                params_dict[key] = obj  # 将参数添加到params_dict中
+
+    def save_weights(self, path):
+        self.to_cpu()  # 将参数转移到CPU
+
+        params_dict = {}
+        self._flatten_params(params_dict)  # 将所有参数保存到params_dict中
+        array_dict = {key: param.data for key, param in params_dict.items()
+                      if param is not None}
+        try:
+            np.savez_compressed(path, **array_dict)
+        except (Exception, KeyboardInterrupt) as e:
+            if os.path.exists(path):
+                os.remove(path)
+            raise
+
+    def load_weights(self, path):
+        npz = np.load(path)
+        params_dict = {}
+        self._flatten_params(params_dict)  # 根据key设置参数数据
+        for key, param in params_dict.items():
+            param.data = npz[key]
 
 
 # =============================================================================
