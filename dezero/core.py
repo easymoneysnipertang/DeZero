@@ -15,6 +15,7 @@ except ImportError:
 # =============================================================================
 class Config:
     enable_backprop = True
+    train = True
 
 
 # 使用上下文管理器来控制Config.enable_backprop的值
@@ -31,6 +32,10 @@ def using_config(name, value):
 # 进一步封装
 def no_grad():
     return using_config('enable_backprop', False)
+
+
+def test_mode():
+    return using_config('train', False)
 
 
 # =============================================================================

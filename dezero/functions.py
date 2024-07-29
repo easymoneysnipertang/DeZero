@@ -484,7 +484,7 @@ def clip(x, x_min, x_max):
 
 
 # =============================================================================
-# accuracy
+# accuracy / dropout
 # =============================================================================
 def accuracy(y, t):
     '''
@@ -496,3 +496,19 @@ def accuracy(y, t):
     result = (pred == t.data)
     acc = result.mean()  # 计算正确占比
     return Variable(as_array(acc))
+
+
+def dropout(x, dropout_ratio=0.5):
+    '''
+    Inverted Dropout
+    '''
+    x = as_variable(x)
+
+    if dezero.Config.train:
+        xp = cuda.get_array_module(x)
+        mask = xp.random.rand(*x.shape) > dropout_ratio  # 关闭部分神经元
+        scale = xp.array(1.0 - dropout_ratio).astype(x.dtype)
+        y = x * mask / scale  # 乘以缩放因子
+        return y
+    else:
+        return x  # 测试阶段什么也不用做
