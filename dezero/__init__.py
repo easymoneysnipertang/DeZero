@@ -25,5 +25,15 @@ else:
     from dezero.datasets import Dataset
     from dezero.dataloaders import DataLoader
 
+    import dezero.datasets
+    import dezero.dataloaders
+    import dezero.optimizers
+    import dezero.functions
+    import dezero.functions_conv
+    import dezero.layers
+    import dezero.utils
+    import dezero.cuda
+    import dezero.transforms
+
 setup_variable()  # 重载Variable类的一些属性
-__version__ = '0.5.54'  # version.stage.step
+__version__ = '0.5.57'  # version.stage.step
