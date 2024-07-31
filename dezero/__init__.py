@@ -24,6 +24,7 @@ else:
     from dezero.models import Model
     from dezero.datasets import Dataset
     from dezero.dataloaders import DataLoader
+    from dezero.dataloaders import SeqDataLoader
 
     import dezero.datasets
     import dezero.dataloaders
@@ -36,4 +37,4 @@ else:
     import dezero.transforms
 
 setup_variable()  # 重载Variable类的一些属性
-__version__ = '0.5.57'  # version.stage.step
+__version__ = '0.5.60'  # version.stage.step
