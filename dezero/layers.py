@@ -216,3 +216,36 @@ class Deconv2d(Layer):
 
         y = F.deconv2d(x, self.W, self.b, self.stride, self.pad)
         return y
+    
+
+# =============================================================================
+# RNN / LSTM
+# =============================================================================
+class RNN(Layer):
+    def __init__(self, hidden_size, input_size=None):
+        """An Elman RNN with tanh.
+
+        Args:
+            hidden_size (int): The number of features in the hidden state.
+            input_size (int): The number of features in the input. If unspecified
+            or `None`, parameter initialization will be deferred until the
+            first `__call__(x)` at which time the size will be determined.
+
+        """
+        super().__init__()
+        # 将x映射到h的权重
+        self.x2h = Linear(hidden_size, input_size=input_size)
+        # 将上一时刻的h映射到h的权重
+        self.h2h = Linear(hidden_size, input_size=input_size, nobias=True)
+        self.h = None
+
+    def reset_state(self):
+        self.h = None
+
+    def forward(self, x):
+        if self.h is None:
+            h_new = F.tanh(self.x2h(x))
+        else:
+            h_new = F.tanh(self.x2h(x) + self.h2h(self.h))
+        self.h = h_new
+        return h_new
