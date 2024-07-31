@@ -224,3 +224,10 @@ def pair(x):
         return x
     else:
         raise ValueError
+    
+
+def get_conv_output_size(input_size, kernel_size, stride, pad):
+    '''
+    计算卷积层的输出大小
+    '''
+    return (input_size + pad * 2 - kernel_size) // stride + 1
